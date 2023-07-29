@@ -3,6 +3,7 @@ package com.project.sharelocation
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -14,8 +15,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.requestLocationUpdates
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.project.sharelocation.databinding.FragmentMapsBinding
 import java.io.IOException
 import java.util.Locale
+
 
 class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
 
@@ -102,7 +104,11 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
         // Get latitude and longitude from the received location
         val latitude = location.latitude
         val longitude = location.longitude
-        PlacesFragment.newInstance(latitude, longitude)
+
+        val intent = Intent("location-data")
+        intent.putExtra("lat", latitude)
+        intent.putExtra("long", longitude)
+        LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
 
         // Place a marker at the current location
         val currentLocation = LatLng(latitude, longitude)
@@ -117,7 +123,7 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
             .target(currentLocation)
             .zoom(11f)
             .build()
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null)
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null)
 
     }
 
