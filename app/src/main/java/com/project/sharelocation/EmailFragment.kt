@@ -1,6 +1,8 @@
 package com.project.sharelocation
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +24,8 @@ class EmailFragment: Fragment() {
 
     private lateinit var viewModel : AddressViewModel
 
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,6 +39,12 @@ class EmailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (ViewModelProvider(requireActivity())[AddressViewModel::class.java])
 
+        context?.let {
+            sharedPreferences = it.getSharedPreferences("shareLocation", Context.MODE_PRIVATE)
+            val email = sharedPreferences.getString("email", "")
+            mBinding.etEmail.setText(email)
+        }
+
         viewModel.currentAddress.observe(viewLifecycleOwner) {
             address = it
         }
@@ -45,13 +55,18 @@ class EmailFragment: Fragment() {
 
         mBinding.btnSend.setOnClickListener {
            if(isValid()){
-                val addressTxt = "Address: $address\nLatitude: $latitude \nLongitude: $longitude"
+               val addressTxt = "Address: $address\nLatitude: $latitude \nLongitude: $longitude"
+               val email = mBinding.etEmail.text.toString()
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                             data = Uri.parse("mailto:")
+                            putExtra(Intent.EXTRA_EMAIL,email)
                             putExtra(Intent.EXTRA_SUBJECT, "My current address")
                             putExtra(Intent.EXTRA_TEXT, addressTxt)
                         }
                if (context?.packageManager?.let { it1 -> intent.resolveActivity(it1) } != null) {
+                   val editor = sharedPreferences.edit()
+                   editor.putString("email", email)
+                   editor.apply()
                    startActivity(intent)
                }
             }
