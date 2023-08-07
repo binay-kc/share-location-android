@@ -4,4 +4,10 @@
     <string name="label_email_colon">Email:</string>
     <string name="label_email_address">Email address</string>
     <string name="label_send_address">Send Address</string>
+    <string name="label_app_description">
+        "Share Location" is an android application that shares your current location with others. \n
+        It also allows you to get nearby places from your current location.
+    </string>
+    <string name="label_contributor">Made by:</string>
+    <string name="label_contributor_info">"Sahil Bhatta\nStudent id : 1157562\nBinay KC\nStudent id : "</string>
 </resources>

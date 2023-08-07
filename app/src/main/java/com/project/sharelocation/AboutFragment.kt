@@ -1,21 +1,26 @@
 package com.project.sharelocation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.project.sharelocation.databinding.FragmentAboutBinding
 
 class AboutFragment: Fragment() {
 
+    private lateinit var mBinding: FragmentAboutBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Log.d("about", "onCreateView: ")
+    ): View{
+        mBinding = FragmentAboutBinding.inflate(inflater, container, false)
+        return mBinding.root
+    }
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
     }
 }
