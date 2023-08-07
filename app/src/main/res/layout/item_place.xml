@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingTop="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <TextView
         android:id="@+id/textViewPlaceName"
@@ -18,5 +20,11 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="@android:color/darker_gray" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/quantum_white_secondary_text"
+        />
 
 </LinearLayout>

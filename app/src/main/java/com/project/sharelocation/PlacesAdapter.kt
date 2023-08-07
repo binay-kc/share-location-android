@@ -12,8 +12,7 @@ class PlacesAdapter: RecyclerView.Adapter<PlacesAdapter.PlaceViewHolder>() {
 
     private val placesList: MutableList<Place> = mutableListOf()
 
-    fun submitList(newList: List<Place>) {
-        Log.d("thok", "submitList: " +newList.size)
+    fun setPlaces(newList: List<Place>) {
         placesList.clear()
         placesList.addAll(newList)
         notifyDataSetChanged()

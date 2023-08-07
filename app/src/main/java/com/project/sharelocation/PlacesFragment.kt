@@ -1,7 +1,6 @@
 package com.project.sharelocation
 
-import android.annotation.SuppressLint
-import android.location.Location
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.project.sharelocation.databinding.FragmentPlacesBinding
 
@@ -43,24 +41,29 @@ class PlacesFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        latitude = arguments?.getDouble("lat", 0.0)!!
-        longitude = arguments?.getDouble("long", 0.0)!!
+        arguments?.let{
+            latitude = it.getDouble("lat", 0.0)
+            longitude = it.getDouble("long", 0.0)
+        }
 
         binding = FragmentPlacesBinding.inflate(inflater, container, false)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         placesAdapter = PlacesAdapter()
         binding.recyclerView.adapter = placesAdapter
 
-        Places.initialize(requireContext(), "AIzaSyCs5RtNIi8Rq3evxP45bGxAQGKjeBsyyWk")
+        Places.initialize(requireContext(), "AIzaSyBboJrU8Ni25rBa5nzlQXs5XGx56w3PBZA")
         placesClient = Places.createClient(requireContext())
 
         fetchNearbyPlaces()
-
-        return binding.root
     }
 
     private fun fetchNearbyPlaces() {
@@ -68,7 +71,6 @@ class PlacesFragment: Fragment() {
 
         val placesList = mutableListOf<Place>()
         for (query in queries) {
-            Log.d("thok", "fetchNearbyPlaces: ")
             val request = FindAutocompletePredictionsRequest.builder()
                 .setQuery(query)
                 .setLocationRestriction(RectangularBounds.newInstance(
@@ -83,13 +85,11 @@ class PlacesFragment: Fragment() {
                 val placeFields = listOf(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
 
                 for (prediction in predictions) {
-                    Log.d("thok", "inside prediction: " +prediction.placeId)
                     val placeId = prediction.placeId
                     val fetchPlaceRequest = FetchPlaceRequest.builder(placeId, placeFields).build()
 
                     placesClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener { fetchPlaceResponse ->
                         val place = fetchPlaceResponse.place
-                        Log.d("thok", "places client: " +fetchPlaceResponse.place)
                         // Add the place to the list if it's not already present
                         if (!placesList.contains(place)) {
                             placesList.add(place)
@@ -98,15 +98,16 @@ class PlacesFragment: Fragment() {
                         // Check if we have processed all the predicted places
 
                             // Update the RecyclerView with the list of landmarks
-                            placesAdapter.submitList(placesList)
+                            placesAdapter.setPlaces(placesList)
 
                     }.addOnFailureListener { exception ->
-                        Log.e("thok", "fetchNearbyPlaces: " +exception.message )
+                        Log.e("Error", "fetchNearbyPlaces: " +exception.message )
                         // Handle the failure to fetch place details
                     }
                 }
             }.addOnFailureListener { exception ->
                 // Handle the error if the search fails
+                Log.e("Error",""+exception.message)
             }
         }
     }

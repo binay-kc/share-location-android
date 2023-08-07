@@ -11,6 +11,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,9 +49,14 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentMapsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = childFragmentManager
@@ -60,8 +66,6 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
         locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager?
         geocoder = Geocoder(requireContext(), Locale.getDefault())
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
-        return binding.root
     }
 
     @SuppressLint("MissingPermission")
@@ -80,6 +84,7 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
 
     @SuppressLint("MissingPermission")
     private fun fetchCurrentLocation() {
+        Log.e("Sahil ","Current location where? ")
         if (isLocationPermissionGranted()) {
             // Use FusedLocationProviderClient to get the last known location
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -113,15 +118,16 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
         // Place a marker at the current location
         val currentLocation = LatLng(latitude, longitude)
         val address = getAddressFromLatLng(latitude, longitude)
+
         val markerOptions = MarkerOptions()
             .position(currentLocation)
-            .title(address + " Lat: "+latitude + " Long: "+longitude)
+            .title("$address Lat: $latitude Lng: $longitude")
         mMap.addMarker(markerOptions)
 
         // Animate the camera to the current location and set an appropriate zoom level
         val cameraPosition = CameraPosition.Builder()
             .target(currentLocation)
-            .zoom(11f)
+            .zoom(15f)
             .build()
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null)
 
