@@ -9,5 +9,9 @@
         It also allows you to get nearby places from your current location.
     </string>
     <string name="label_contributor">Made by:</string>
-    <string name="label_contributor_info">"Sahil Bhatta\nStudent id : 1157562\nBinay KC\nStudent id : "</string>
+    <string name="label_contributor_info">"Sahil Bhatta\nStudent id : 1157562\nBinay KC\nStudent id : 1165872"</string>
+    <string name="label_about">About</string>
+    <string name="label_send_email">Send Email</string>
+    <string name="label_places_nearby">Places NearBy</string>
+    <string name="label_google_map">Google Map</string>
 </resources>

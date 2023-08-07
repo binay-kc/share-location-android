@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/map"
-        android:title="Google Map"
+        android:title="@string/label_google_map"
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item
         android:id="@+id/places"
-        android:title="Places NearBy"
+        android:title="@string/label_places_nearby"
         android:orderInCategory="200"
         app:showAsAction="never" />
     <item
         android:id="@+id/email"
-        android:title="Send Email"
+        android:title="@string/label_send_email"
         android:orderInCategory="200"
         app:showAsAction="never" />
     <item
         android:id="@+id/about"
-        android:title="About Us"
+        android:title="@string/label_about"
         android:orderInCategory="200"
         app:showAsAction="never" />
 </menu>

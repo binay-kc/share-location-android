@@ -18,9 +18,4 @@ class AboutFragment: Fragment() {
         mBinding = FragmentAboutBinding.inflate(inflater, container, false)
         return mBinding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        
-    }
 }
