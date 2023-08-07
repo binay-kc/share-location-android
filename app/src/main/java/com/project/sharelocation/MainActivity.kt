@@ -9,13 +9,18 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.project.sharelocation.viewModel.AddressViewModel
 
 
 class MainActivity : AppCompatActivity() {
 
     private var latitude = 0.0
     private var longitude = 0.0
+
+    private lateinit var viewModel : AddressViewModel
+
 
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -33,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.show()
         openFragment(MapsFragment())
+        viewModel = (ViewModelProvider(this)[AddressViewModel::class.java])
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

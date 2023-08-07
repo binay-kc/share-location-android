@@ -11,12 +11,12 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -28,9 +28,9 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.project.sharelocation.databinding.FragmentMapsBinding
+import com.project.sharelocation.viewModel.AddressViewModel
 import java.io.IOException
 import java.util.Locale
-
 
 class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
 
@@ -40,6 +40,8 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var binding: FragmentMapsBinding
+
+    private lateinit var viewModel : AddressViewModel
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
@@ -66,6 +68,8 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
         locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager?
         geocoder = Geocoder(requireContext(), Locale.getDefault())
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        viewModel = (ViewModelProvider(requireActivity())[AddressViewModel::class.java])
+
     }
 
     @SuppressLint("MissingPermission")
@@ -84,7 +88,6 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
 
     @SuppressLint("MissingPermission")
     private fun fetchCurrentLocation() {
-        Log.e("Sahil ","Current location where? ")
         if (isLocationPermissionGranted()) {
             // Use FusedLocationProviderClient to get the last known location
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -131,6 +134,8 @@ class MapsFragment: Fragment(), OnMapReadyCallback, LocationListener {
             .build()
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null)
 
+        viewModel.setCurrentAddress(address)
+        viewModel.setCurrentLatLng(currentLocation)
     }
 
     //get the address from the latitude and longitude

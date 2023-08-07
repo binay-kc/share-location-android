@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Share Location</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="label_email_colon">Email:</string>
+    <string name="label_email_address">Email address</string>
+    <string name="label_send_address">Send Address</string>
 </resources>
